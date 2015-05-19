@@ -1,0 +1,25 @@
+/* block nav links */
+ul#header_nav_links {
+	list-style-type: none;
+	float: right;
+	margin-bottom: 0;
+/*	margin-top:5px*/
+}
+#header_nav_links li {
+	float: left;
+/*	padding: 0 8px;*/
+	border-left:1px solid #333;
+/*	line-height:11px;*/
+}
+#header_nav_links a {
+	display: block;
+	color: #fff;
+	font-weight: bold;
+	padding: 8px 10px 11px 10px;
+	text-shadow: 1px 1px rgba(0, 0, 0, 0.2);
+	cursor: pointer;
+	line-height: 18px;
+}
+#header_nav_links li:first-child {border:none;}
+#header_nav_links a {text-decoration: none}
+#header_nav_links a:hover {text-decoration:underline}
