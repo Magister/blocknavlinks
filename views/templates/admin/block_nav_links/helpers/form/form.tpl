@@ -1,5 +1,5 @@
 {*
-* 2007-2014 PrestaShop
+* 2007-2015 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,17 +18,19 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2014 PrestaShop SA
+*  @copyright  2007-2015 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<!-- Block nav links module HEADER -->
-<ul id="header_nav_links">
-	{foreach from=$links key='index' item='link_item' name='links'}
-	<li><a href="{$link->getCMSLink($link_item['id_cms_link'], $link_item['link_rewrite'])|escape:'html'}" title="{$link_item['title']}">{$link_item['title']}</a></li>
-	{/foreach}
-	<li><a href="{$link->getCMSLink('6', 'oplata-i-dostavka')|escape:'html'}" title="{l s='Delivery and payment' mod='blocknavlinks'}">{l s='Delivery and payment' mod='blocknavlinks'}</a></li>
-	<li><a href="{$link->getCMSLink('7', 'contacts')|escape:'html'}" title="{l s='Contacts' mod='blocknavlinks'}">{l s='Contacts' mod='blocknavlinks'}</a></li>
-</ul>
-<!-- /Block nav links module HEADER -->
+{extends file="helpers/form/form.tpl"}
+{block name="input"}
+	{if $input.type == 'select_category'}
+		<select name="{$input.name}">
+			{$input.options.html}
+		</select>
+	{else}
+		{$smarty.block.parent}
+	{/if}
+{/block}
+
