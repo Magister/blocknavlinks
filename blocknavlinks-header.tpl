@@ -28,7 +28,5 @@
 	{foreach from=$links key='index' item='link_item' name='links'}
 	<li><a href="{$link->getCMSLink($link_item['id_cms_link'], $link_item['link_rewrite'])|escape:'html'}" title="{$link_item['title']}">{$link_item['title']}</a></li>
 	{/foreach}
-	<li><a href="{$link->getCMSLink('6', 'oplata-i-dostavka')|escape:'html'}" title="{l s='Delivery and payment' mod='blocknavlinks'}">{l s='Delivery and payment' mod='blocknavlinks'}</a></li>
-	<li><a href="{$link->getCMSLink('7', 'contacts')|escape:'html'}" title="{l s='Contacts' mod='blocknavlinks'}">{l s='Contacts' mod='blocknavlinks'}</a></li>
 </ul>
 <!-- /Block nav links module HEADER -->
