@@ -64,7 +64,8 @@ class BlockNavLinks extends Module
         if (!$db->execute('CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'blocknavlinks` (
             `id_blocknavlinks` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `id_shop` INT UNSIGNED NOT NULL,
-            `id_cms_link` INT UNSIGNED,
+            `id_cms_link` INT UNSIGNED NOT NULL,
+            `is_cms` TINYINT(1) UNSIGNED ZEROFILL NOT NULL,
             `date_add` DATE,
             `date_upd` DATE,
             `position` TEXT
@@ -74,7 +75,8 @@ class BlockNavLinks extends Module
         if (!$db->execute('CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'blocknavlinks_lang` (
             `id_blocknavlinks` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `id_lang` INT UNSIGNED NOT NULL,
-            `title` VARCHAR(255)
+            `title` VARCHAR(255),
+            `url` VARCHAR(255)
             ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8'))
             return false;
 
@@ -133,7 +135,9 @@ class BlockNavLinks extends Module
                'SELECT
                    n.`id_blocknavlinks` as id,
                    n.`id_cms_link` as id_cms_link,
+                   n.`is_cms` as is_cms,
                    nl.`title` as title,
+                   nl.`url` as url,
                    cms_lang.`link_rewrite` as link_rewrite
                 FROM `'._DB_PREFIX_.'blocknavlinks` as n
                     LEFT JOIN `'._DB_PREFIX_.'blocknavlinks_lang` as nl
@@ -170,7 +174,7 @@ class BlockNavLinks extends Module
     }
 
     public function getContent() {
-        return '<a href="' . $this->context->link->getAdminLink('AdminBlockNavLinks') . '">' .
+        return '<a class="btn btn-default" href="' . $this->context->link->getAdminLink('AdminBlockNavLinks') . '">' .
             $this->l('Setup links') . '</a>';
     }
 

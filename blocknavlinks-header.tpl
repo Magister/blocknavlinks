@@ -26,7 +26,13 @@
 <!-- Block nav links module HEADER -->
 <ul id="header_nav_links">
 	{foreach from=$links key='index' item='link_item' name='links'}
-	<li><a href="{$link->getCMSLink($link_item['id_cms_link'], $link_item['link_rewrite'])|escape:'html'}" title="{$link_item['title']}">{$link_item['title']}</a></li>
+	<li>
+            {if $link_item['is_cms'] == 0}
+            <a href="{$link_item['url']|escape:'html'}" title="{$link_item['title']}">{$link_item['title']}</a>
+            {else}
+            <a href="{$link->getCMSLink($link_item['id_cms_link'], $link_item['link_rewrite'])|escape:'html'}" title="{$link_item['title']}">{$link_item['title']}</a>
+            {/if}
+        </li>
 	{/foreach}
 </ul>
 <!-- /Block nav links module HEADER -->

@@ -8,8 +8,10 @@ class NavLinkItem extends ObjectModel
     public $id_blocknavlinks;
     public $id_shop;
     public $position;
+    public $is_cms;
     public $id_cms_link;
     public $title;
+    public $url;
     public $date_add;
     public $date_upd;
 
@@ -20,8 +22,10 @@ class NavLinkItem extends ObjectModel
         'fields' => array(
             'id_shop' =>            array('type' => self::TYPE_INT),
             'position' =>           array('type' => self::TYPE_INT),
+            'is_cms' =>             array('type' => self::TYPE_BOOL),
             'id_cms_link' =>        array('type' => self::TYPE_INT),
             'title' =>              array('type' => self::TYPE_STRING, 'lang' => true, 'validate' => 'isCleanHtml', 'required' => true, 'size' => 255),
+            'url' =>                array('type' => self::TYPE_STRING, 'lang' => true, 'validate' => 'isUrl', 'size' => 255),
             'date_add' =>           array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
             'date_upd' =>           array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
         )
@@ -32,6 +36,7 @@ class NavLinkItem extends ObjectModel
     }
 
     public function add($autodate = true, $null_values = false) {
+        $this->do_preprocess();
         $context = Context::getContext();
         $this->id_shop = $context->shop->id;
 
@@ -53,6 +58,24 @@ class NavLinkItem extends ObjectModel
 
         $res &= parent::delete();
         return $res;
+    }
+
+    protected function do_preprocess() {
+        if ($this->is_cms) {
+            $this->url = '';
+        } else {
+            $this->id_cms_link = 0;
+        }
+    }
+
+    public function save($null_values = false, $autodate = true) {
+        $this->do_preprocess();
+        return parent::save($null_values, $autodate);
+    }
+
+    public function update($null_values = false) {
+        $this->do_preprocess();
+        return parent::update($null_values);
     }
 
     public function reOrderPositions() {

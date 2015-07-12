@@ -36,36 +36,21 @@ class AdminBlockNavLinksController extends ModuleAdminController {
             ),
             'position' => array(
                 'title' => $this->l('Position'),
-                'align' => 'center',
+                'align' => 'left',
                 'position' => 'position',
-                'width' => 'auto'
+                'width' => 33
             ),
             'title' => array(
                 'title' => $this->l('Name'),
                 'width' => 'auto'
             ),
-            'id_cms_link' => array(
-                'title' => $this->l('CMS page'),
-                'width' => 'auto'
-            )
         );
 
         parent::__construct();
     }
 
-    protected function renderCmsPageSelect($pages) {
-        $html = '';
-        foreach ($pages as $page) {
-            $html .= '<option value="'.$page['id_cms'].'"'.(($this->object->id_cms_link == $page['id_cms']) ? ' selected="selected"' : '').'>'
-                        .$page['meta_title'].'</option>';
-        }
-        return $html;
-    }
-
     // This method generates the Add/Edit form
     public function renderForm() {
-        $pages = CMS::getCmsPages($this->context->language->id);
-        $pages_html = $this->renderCmsPageSelect($pages);
         // Building the Add/Edit form
         $this->fields_form = array(
             'legend' => array(
@@ -83,13 +68,51 @@ class AdminBlockNavLinksController extends ModuleAdminController {
                     'desc' => $this->l('Link title'),
                 ),
                 array(
-                    'type' => 'select_category',
+                    'type' => 'switch',
+                    'label' => $this->l('Use CMS page:'),
+                    'name' => 'is_cms',
+                    'size' => 'auto',
+                    'required' => true,
+                    'values' => array(
+                        array(
+                            'id' => 'is_cms',
+                            'value' => 1,
+                            'label' => '<img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" />'
+                        ),
+                        array(
+                            'id' => 'is_url',
+                            'value' => 0,
+                            'label' => '<img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" />'
+                        ),
+                    ),
+                ),
+                array(
+                    'type' => 'select',
+                    'id' => 'cms_link',
                     'label' => $this->l('CMS Page:'),
+                    'required' => true,
                     'name' => 'id_cms_link',
                     'options' => array(
-                        'html' => $pages_html,
+                        'query' => array_merge(
+                                array(
+                                    array('id_cms' => 0, 'meta_title' => '--')
+                                ),
+                                CMS::getCmsPages($this->context->language->id)
+                            ),
+                        'id' => 'id_cms',
+                        'name' => 'meta_title',
                     ),
-                )
+                ),
+                array(
+                    'type' => 'text',
+                    'label' => $this->l('URL:'),
+                    'id' => 'url',
+                    'name' => 'url',
+                    'size' => 33,
+                    'required' => true,
+                    'lang' => true,
+                    'desc' => $this->l('Link URL (if not CMS)'),
+                ),
             ),
             'submit' => array(
                 'title' => $this->l('Save')

@@ -24,13 +24,28 @@
 *}
 
 {extends file="helpers/form/form.tpl"}
-{block name="input"}
-	{if $input.type == 'select_category'}
-		<select name="{$input.name}">
-			{$input.options.html}
-		</select>
-	{else}
+{block name="input_row"}
+	{if isset($input.id)}
+	<div id="{$input.id}">
+	{/if}
 		{$smarty.block.parent}
+	{if isset($input.id)}
+	</div>
 	{/if}
 {/block}
-
+{block name="script"}
+	function switch_cms() {
+		var cms_on = $('input[name=is_cms]').filter(':checked').val();
+		if (cms_on=="1") {
+			$('#cms_link').show();
+			$('#url').hide();
+		} else {
+			$('#cms_link').hide();
+			$('#url').show();
+		}
+	};
+	$(document).ready(function() {
+		switch_cms();
+	});
+	$('#is_cms_on,#is_cms_off').change(switch_cms);
+{/block}
