@@ -8,12 +8,18 @@ class NavLinkItem extends ObjectModel
     public $id_blocknavlinks;
     public $id_shop;
     public $position;
-    public $is_cms;
+    public $link_type;
     public $id_cms_link;
+    public $module_name;
+    public $module_controller;
     public $title;
     public $url;
     public $date_add;
     public $date_upd;
+
+    const LINK_TYPE_CMS = 0;
+    const LINK_TYPE_MODULE = 1;
+    const LINK_TYPE_CUSTOM = 2;
 
     public static $definition = array(
         'table' => 'blocknavlinks',
@@ -22,8 +28,10 @@ class NavLinkItem extends ObjectModel
         'fields' => array(
             'id_shop' =>            array('type' => self::TYPE_INT),
             'position' =>           array('type' => self::TYPE_INT),
-            'is_cms' =>             array('type' => self::TYPE_BOOL),
+            'link_type' =>          array('type' => self::TYPE_INT),
             'id_cms_link' =>        array('type' => self::TYPE_INT),
+            'module_name' =>        array('type' => self::TYPE_STRING, 'validate' => 'isCleanHtml', 'size' > 128),
+            'module_controller' =>  array('type' => self::TYPE_STRING, 'validate' => 'isCleanHtml', 'size' > 128),
             'title' =>              array('type' => self::TYPE_STRING, 'lang' => true, 'validate' => 'isCleanHtml', 'required' => true, 'size' => 255),
             'url' =>                array('type' => self::TYPE_STRING, 'lang' => true, 'validate' => 'isUrl', 'size' => 255),
             'date_add' =>           array('type' => self::TYPE_DATE, 'validate' => 'isDate'),
@@ -61,10 +69,17 @@ class NavLinkItem extends ObjectModel
     }
 
     protected function do_preprocess() {
-        if ($this->is_cms) {
+        if ($this->link_type == self::LINK_TYPE_CMS) {
             $this->url = '';
-        } else {
+            $this->module_name = '';
+            $this->module_controller = '';
+        } else if ($this->link_type == self::LINK_TYPE_MODULE) {
             $this->id_cms_link = 0;
+            $this->url = '';
+        } else if ($this->link_type == self::LINK_TYPE_CUSTOM) {
+            $this->id_cms_link = 0;
+            $this->module_name = '';
+            $this->module_controller = '';
         }
     }
 

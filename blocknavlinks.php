@@ -65,7 +65,9 @@ class BlockNavLinks extends Module
             `id_blocknavlinks` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `id_shop` INT UNSIGNED NOT NULL,
             `id_cms_link` INT UNSIGNED NOT NULL,
-            `is_cms` TINYINT(1) UNSIGNED ZEROFILL NOT NULL,
+            `link_type` TINYINT(1) UNSIGNED ZEROFILL NOT NULL,
+            `module_name` VARCHAR(128),
+            `module_controller` VARCHAR(128),
             `date_add` DATE,
             `date_upd` DATE,
             `position` TEXT
@@ -135,7 +137,9 @@ class BlockNavLinks extends Module
                'SELECT
                    n.`id_blocknavlinks` as id,
                    n.`id_cms_link` as id_cms_link,
-                   n.`is_cms` as is_cms,
+                   n.`link_type` as link_type,
+                   n.`module_name` as module_name,
+                   n.`module_controller` as module_controller,
                    nl.`title` as title,
                    nl.`url` as url,
                    cms_lang.`link_rewrite` as link_rewrite

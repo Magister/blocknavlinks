@@ -34,18 +34,30 @@
 	{/if}
 {/block}
 {block name="script"}
-	function switch_cms() {
-		var cms_on = $('input[name=is_cms]').filter(':checked').val();
-		if (cms_on=="1") {
+	function switch_link_type() {
+		var link_type = $('input[name=link_type]').filter(':checked').val();
+		if (link_type == "0") {
+			// CMS
 			$('#cms_link').show();
 			$('#url').hide();
+			$('#module_name').hide();
+			$('#module_controller').hide();
+		} else if (link_type == "1") {
+			// Module
+			$('#cms_link').hide();
+			$('#url').hide();
+			$('#module_name').show();
+			$('#module_controller').show();
 		} else {
+			// Custom
 			$('#cms_link').hide();
 			$('#url').show();
+			$('#module_name').hide();
+			$('#module_controller').hide();
 		}
 	};
 	$(document).ready(function() {
-		switch_cms();
+		switch_link_type();
 	});
-	$('#is_cms_on,#is_cms_off').change(switch_cms);
+	$('input[name=link_type]').change(switch_link_type);
 {/block}

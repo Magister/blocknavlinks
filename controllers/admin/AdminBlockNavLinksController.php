@@ -49,8 +49,14 @@ class AdminBlockNavLinksController extends ModuleAdminController {
         parent::__construct();
     }
 
+    public static function sortModules($a, $b) {
+        return $a['name'] > $b['name'];
+    }
+
     // This method generates the Add/Edit form
     public function renderForm() {
+        $modules = Module::getModulesInstalled();
+        usort($modules, 'AdminBlockNavLinksController::sortModules');
         // Building the Add/Edit form
         $this->fields_form = array(
             'legend' => array(
@@ -68,21 +74,26 @@ class AdminBlockNavLinksController extends ModuleAdminController {
                     'desc' => $this->l('Link title'),
                 ),
                 array(
-                    'type' => 'switch',
-                    'label' => $this->l('Use CMS page:'),
-                    'name' => 'is_cms',
+                    'type' => 'radio',
+                    'label' => $this->l('Link type:'),
+                    'name' => 'link_type',
                     'size' => 'auto',
                     'required' => true,
                     'values' => array(
                         array(
-                            'id' => 'is_cms',
-                            'value' => 1,
-                            'label' => '<img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" />'
+                            'value' => 0,
+                            'id' => 'link_type_cms',
+                            'label' => $this->l('CMS')
                         ),
                         array(
-                            'id' => 'is_url',
-                            'value' => 0,
-                            'label' => '<img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" />'
+                            'value' => 1,
+                            'id' => 'link_type_module',
+                            'label' => $this->l('Module')
+                        ),
+                        array(
+                            'value' => 2,
+                            'id' => 'link_type_custom',
+                            'label' => $this->l('Custom')
                         ),
                     ),
                 ),
@@ -102,6 +113,25 @@ class AdminBlockNavLinksController extends ModuleAdminController {
                         'id' => 'id_cms',
                         'name' => 'meta_title',
                     ),
+                ),
+                array(
+                    'type' => 'select',
+                    'id' => 'module_name',
+                    'label' => $this->l('Module:'),
+                    'required' => true,
+                    'name' => 'module_name',
+                    'options' => array(
+                        'query' => $modules,
+                        'id' => 'name',
+                        'name' => 'name',
+                    ),
+                ),
+                array(
+                    'type' => 'text',
+                    'id' => 'module_controller',
+                    'label' => $this->l('Module controller:'),
+                    'required' => true,
+                    'name' => 'module_controller',
                 ),
                 array(
                     'type' => 'text',
